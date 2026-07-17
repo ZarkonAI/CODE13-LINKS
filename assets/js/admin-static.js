@@ -281,11 +281,11 @@ function createAdminItem(link, index) {
     const actions = document.createElement('div');
     actions.className = 'admin-item__actions';
     const buttons = [
-        ['up', '↑', 'Поднять'],
-        ['down', '↓', 'Опустить'],
-        ['edit', 'EDIT', 'Редактировать'],
-        ['toggle', link.enabled ? 'HIDE' : 'SHOW', link.enabled ? 'Скрыть' : 'Показать'],
-        ['delete', 'DEL', 'Удалить'],
+        ['up', '↑', 'Move up'],
+        ['down', '↓', 'Move down'],
+        ['edit', 'EDIT', 'Edit'],
+        ['toggle', link.enabled ? 'HIDE' : 'SHOW', link.enabled ? 'Hide' : 'Show'],
+        ['delete', 'DEL', 'Delete'],
     ];
     buttons.forEach(([action, label, title]) => {
         const button = document.createElement('button');
@@ -327,7 +327,7 @@ function render() {
     if (!state.links.length) {
         const empty = document.createElement('div');
         empty.className = 'admin-list__empty';
-        empty.textContent = 'Ссылки пока не добавлены.';
+        empty.textContent = 'No access points added yet.';
         adminList.append(empty);
     }
 }
@@ -372,7 +372,7 @@ function linksJsContent() {
         enabled: Boolean(link.enabled),
         position: index + 1,
     }));
-    return `/* Сгенерировано через CODE13 FORGE */\nwindow.CODE13_LINKS = ${JSON.stringify(published, null, 2)};\n`;
+    return `/* Generated with CODE13 FORGE */\nwindow.CODE13_LINKS = ${JSON.stringify(published, null, 2)};\n`;
 }
 
 function enterAdmin() {
@@ -389,7 +389,7 @@ loginForm.addEventListener('submit', async (event) => {
 
     const remaining = lockRemainingMs();
     if (remaining > 0) {
-        showLoginError(`Слишком много попыток. Повторите через ${Math.ceil(remaining / 60_000)} мин.`);
+        showLoginError(`Too many attempts. Try again in ${Math.ceil(remaining / 60_000)} min.`);
         return;
     }
 
@@ -408,11 +408,11 @@ loginForm.addEventListener('submit', async (event) => {
             registerFailedAttempt();
             const nowLocked = lockRemainingMs();
             showLoginError(nowLocked > 0
-                ? `Доступ заблокирован на ${CONFIG.lockMinutes} минут.`
-                : 'Неверный логин или пароль.');
+                ? `Access locked for ${CONFIG.lockMinutes} minutes.`
+                : 'Invalid login or password.');
         }
     } catch (_) {
-        showLoginError('Браузер не поддерживает необходимую функцию шифрования.');
+        showLoginError('This browser does not support the required encryption function.');
     }
 });
 
@@ -428,11 +428,11 @@ form.addEventListener('submit', (event) => {
     const url = urlInput.value.trim();
 
     if (!title) {
-        showToast('Введите название.', true);
+        showToast('Enter a title.', true);
         return;
     }
     if (!isValidHttpUrl(url)) {
-        showToast('Введите корректную ссылку http:// или https://.', true);
+        showToast('Enter a valid http:// or https:// URL.', true);
         return;
     }
 
@@ -441,10 +441,10 @@ form.addEventListener('submit', (event) => {
         if (index >= 0) {
             state.links[index] = { ...state.links[index], title, url, enabled: enabledInput.checked };
         }
-        showToast('Изменения сохранены в черновик.');
+        showToast('Changes saved to the local draft.');
     } else {
         state.links.push({ id: createId(), title, url, enabled: enabledInput.checked, position: state.links.length + 1 });
-        showToast('Ссылка добавлена в черновик.');
+        showToast('Access point added to the local draft.');
     }
 
     persistDraft();
@@ -468,12 +468,12 @@ adminList.addEventListener('click', (event) => {
     }
     if (action === 'toggle') {
         link.enabled = !link.enabled;
-        showToast(link.enabled ? 'Ссылка показана.' : 'Ссылка скрыта.');
+        showToast(link.enabled ? 'Access point is now visible.' : 'Access point is now hidden.');
     } else if (action === 'delete') {
-        if (!window.confirm(`Удалить ссылку «${link.title}»?`)) return;
+        if (!window.confirm(`Delete “${link.title}”?`)) return;
         state.links.splice(index, 1);
         if (state.editingId === link.id) resetForm();
-        showToast('Ссылка удалена.');
+        showToast('Access point deleted.');
     } else if (action === 'up' && index > 0) {
         [state.links[index - 1], state.links[index]] = [state.links[index], state.links[index - 1]];
     } else if (action === 'down' && index < state.links.length - 1) {
@@ -486,12 +486,12 @@ adminList.addEventListener('click', (event) => {
 
 document.getElementById('export-js').addEventListener('click', () => {
     downloadFile('links.js', linksJsContent(), 'text/javascript;charset=utf-8');
-    showToast('Файл links.js скачан.');
+    showToast('links.js downloaded.');
 });
 
 document.getElementById('export-json').addEventListener('click', () => {
     downloadFile('code13-links-backup.json', JSON.stringify(state.links, null, 2), 'application/json;charset=utf-8');
-    showToast('Резервная копия скачана.');
+    showToast('JSON backup downloaded.');
 });
 
 document.getElementById('import-json').addEventListener('change', async (event) => {
@@ -499,30 +499,30 @@ document.getElementById('import-json').addEventListener('change', async (event) 
     if (!file) return;
     try {
         const parsed = JSON.parse(await file.text());
-        if (!Array.isArray(parsed)) throw new Error('Файл должен содержать массив ссылок.');
+        if (!Array.isArray(parsed)) throw new Error('The file must contain an array of links.');
         const normalized = parsed.map((link, index) => normalizeLink(link, index));
         if (normalized.some((link) => !link.title || !isValidHttpUrl(link.url))) {
-            throw new Error('В файле есть некорректные название или ссылка.');
+            throw new Error('The file contains an invalid title or URL.');
         }
         state.links = normalized;
         persistDraft();
         render();
         resetForm();
-        showToast('Данные импортированы.');
+        showToast('Data imported.');
     } catch (error) {
-        showToast(error.message || 'Не удалось импортировать файл.', true);
+        showToast(error.message || 'Could not import the file.', true);
     } finally {
         event.target.value = '';
     }
 });
 
 document.getElementById('reset-published').addEventListener('click', () => {
-    if (!window.confirm('Удалить локальный черновик и вернуть опубликованные ссылки?')) return;
+    if (!window.confirm('Delete the local draft and restore the published links?')) return;
     localStorage.removeItem(STORAGE_KEY);
     state.links = clonePublishedLinks();
     render();
     resetForm();
-    showToast('Черновик сброшен.');
+    showToast('Draft reset.');
 });
 
 document.getElementById('logout-button').addEventListener('click', () => {

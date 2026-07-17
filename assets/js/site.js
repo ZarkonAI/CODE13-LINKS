@@ -11,7 +11,7 @@ function getLinksForCurrentBrowser() {
         const draft = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || 'null');
         if (Array.isArray(draft)) return draft;
     } catch (_) {
-        // Используем опубликованные данные, если черновик повреждён.
+        // Fall back to published data if the local draft is invalid.
     }
     return getPublishedLinks();
 }
@@ -103,7 +103,6 @@ function startRevealObserver() {
 
 function renderLinks() {
     const grid = document.getElementById('links-grid');
-    const empty = document.getElementById('empty-state');
     const counter = document.getElementById('active-links-count');
 
     const links = getLinksForCurrentBrowser()
@@ -111,7 +110,6 @@ function renderLinks() {
         .sort((a, b) => Number(a.position || 0) - Number(b.position || 0));
 
     grid.replaceChildren(...links.map(createCard));
-    empty.hidden = links.length > 0;
     counter.textContent = `${links.length} ACTIVE ${links.length === 1 ? 'LINK' : 'LINKS'}`;
     startRevealObserver();
 }
