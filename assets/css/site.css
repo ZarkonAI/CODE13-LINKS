@@ -208,14 +208,126 @@ body::after {
     margin: 0 0 12px;
     display: block;
 }
-.directory > .eyebrow span {
+
+.directory-line {
+    position: relative;
+    width: 100%;
+    height: 12px;
+    margin: 0 0 12px;
+    overflow: hidden;
+}
+
+.directory-line span {
+    position: absolute;
+    top: 50%;
+    left: 0;
+
+    display: block;
+    width: 100%;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        rgba(249, 115, 22, 0.12) 0%,
+        rgba(249, 115, 22, 0.65) 18%,
+        #f97316 50%,
+        rgba(249, 115, 22, 0.65) 82%,
+        rgba(249, 115, 22, 0.12) 100%
+    );
+
+    box-shadow:
+        0 0 5px rgba(249, 115, 22, 0.55),
+        0 0 14px rgba(249, 115, 22, 0.22);
+
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left center;
+
+    animation:
+        directory-line-open 1.1s cubic-bezier(.22, 1, .36, 1) forwards,
+        directory-line-glow 3.6s ease-in-out 1.1s infinite;
+}
+
+@keyframes directory-line-open {
+    from {
+        transform: translateY(-50%) scaleX(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(-50%) scaleX(1);
+        opacity: 1;
+    }
+}
+
+@keyframes directory-line-glow {
+    0%,
+    100% {
+        opacity: 0.72;
+        box-shadow:
+            0 0 5px rgba(249, 115, 22, 0.4),
+            0 0 12px rgba(249, 115, 22, 0.16);
+    }
+
+    50% {
+        opacity: 1;
+        box-shadow:
+            0 0 7px rgba(249, 115, 22, 0.75),
+            0 0 20px rgba(249, 115, 22, 0.3);
+    }
+}
+
+.directory-line::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -25%;
+
+    width: 22%;
+    height: 3px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 185, 110, 0.2),
+        rgba(255, 210, 160, 0.95),
+        rgba(249, 115, 22, 0.35),
+        transparent
+    );
+
+    filter: blur(1px);
+    transform: translateY(-50%);
+    animation: directory-line-scan 4.5s ease-in-out 1.3s infinite;
+}
+
+@keyframes directory-line-scan {
+    0% {
+        left: -25%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    45% {
+        opacity: 1;
+    }
+
+    58%,
+    100% {
+        left: 105%;
+        opacity: 0;
+    }
+}
+
+/* .directory > .eyebrow span {
     display: block;
     width: 100%;
     height: 1px;
     border-radius: 999px;
     background: linear-gradient(90deg, var(--orange) 0%, var(--orange-2) 50%, var(--orange) 100%);
     box-shadow: 0 0 10px rgba(249,115,22,.7), 0 0 22px rgba(249,115,22,.18);
-}
+} */
 
 .hero h1 {
     max-width: 760px;
@@ -257,7 +369,7 @@ body::after {
     letter-spacing: .14em;
 }
 
-.directory { padding: 42px 0 64px; }
+.directory { padding: 15px 0 64px; }
 .section-head {
     margin-bottom: 18px;
     display: flex;
