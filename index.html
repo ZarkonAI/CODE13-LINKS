@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#070706">
+    <meta name="description" content="Официальные ссылки CODE13 UNION.">
+    <title>CODE13 LINKS</title>
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="assets/img/logo.webp" as="image" type="image/webp">
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script src="data/links.js"></script>
+    <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+<div class="ambient ambient--one" aria-hidden="true"></div>
+<div class="ambient ambient--two" aria-hidden="true"></div>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" href="./" aria-label="CODE13 LINKS — главная">
+            <span class="brand__mark">C13</span>
+            <span class="brand__text">CODE13 <b>LINKS</b></span>
+        </a>
+        <div class="verified"><span class="verified__dot"></span> VERIFIED ACCESS POINTS</div>
+    </header>
+
+    <main>
+        <section class="hero" data-reveal>
+            <div class="hero__noise" aria-hidden="true"></div>
+            <div class="hero__content">
+                <div class="hero__logo-wrap">
+                    <img class="hero__logo" src="assets/img/logo.webp" alt="Логотип CODE13">
+                </div>
+                <div>
+                    <p class="eyebrow"><span></span> CODE13 UNION NETWORK</p>
+                    <h1>OFFICIAL<br><em>ACCESS GRID</em></h1>
+                    <p class="hero__lead">Проверенные точки доступа к официальным ресурсам проекта.</p>
+                </div>
+            </div>
+            <div class="hero__meta">
+                <span>STATUS: ONLINE</span>
+                <span id="active-links-count">0 ACTIVE LINKS</span>
+                <span>SECURE ROUTING</span>
+            </div>
+        </section>
+
+        <section class="directory" aria-labelledby="directory-title">
+            <div class="section-head" data-reveal>
+                <div>
+                    <p class="eyebrow"><span></span> CONNECTION DIRECTORY</p>
+                    <h2 id="directory-title">SELECT ACCESS POINT</h2>
+                </div>
+                <p class="section-head__note">Все переходы открываются в новой вкладке.</p>
+            </div>
+
+            <div class="links-grid" id="links-grid" aria-live="polite"></div>
+            <div class="empty-state" id="empty-state" data-reveal hidden>
+                <span class="empty-state__icon">C13</span>
+                <h3>Ссылки пока не добавлены</h3>
+                <p>Список официальных точек доступа появится здесь.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span>© <span data-current-year></span> CODE13 UNION</span>
+        <span>OFFICIAL RESOURCES • VERIFIED ROUTES</span>
+    </footer>
+</div>
+</body>
+</html>

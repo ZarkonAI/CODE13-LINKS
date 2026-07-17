@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#070706">
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <title>FORGE • CODE13</title>
+    <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <script src="../data/links.js"></script>
+    <script src="../assets/js/admin-static.js" defer></script>
+</head>
+<body class="admin-body">
+    <main class="login-shell" id="login-view">
+        <section class="login-card">
+            <div class="login-card__top">
+                <span class="brand__mark">C13</span>
+                <span class="login-card__status"><i></i> SECURE GATEWAY</span>
+            </div>
+            <p class="eyebrow"><span></span> RESTRICTED AREA</p>
+            <h1>FORGE<br>ACCESS</h1>
+            <p class="login-card__lead">Панель управления официальными ссылками CODE13.</p>
+
+            <div class="login-error" id="login-error" role="alert" hidden></div>
+
+            <form class="login-form" id="login-form" autocomplete="off">
+                <label>
+                    <span>LOGIN IDENTIFIER</span>
+                    <input id="login-username" type="text" required maxlength="80" autocomplete="username" spellcheck="false">
+                </label>
+                <label>
+                    <span>ACCESS KEY</span>
+                    <input id="login-password" type="password" required maxlength="200" autocomplete="current-password">
+                </label>
+                <button type="submit">ENTER FORGE <span>↗</span></button>
+            </form>
+            <p class="login-card__foot">LOCAL SESSION • ATTEMPT LIMIT • STATIC MODE</p>
+        </section>
+    </main>
+
+    <div id="admin-view" hidden>
+        <div class="admin-preview">
+            <header class="topbar admin-topbar">
+                <a class="brand" href="../" target="_blank" rel="noopener">
+                    <span class="brand__mark">C13</span>
+                    <span class="brand__text">CODE13 <b>LINKS</b></span>
+                </a>
+                <div class="admin-mode"><i></i> ADMIN MODE</div>
+            </header>
+
+            <main>
+                <section class="admin-hero">
+                    <p class="eyebrow"><span></span> LIVE PREVIEW</p>
+                    <h1>ACCESS GRID</h1>
+                    <p>Изменения сохраняются как локальный черновик. Для публикации скачайте новый файл links.js.</p>
+                </section>
+
+                <section class="directory admin-directory">
+                    <div class="section-head">
+                        <div>
+                            <p class="eyebrow"><span></span> CONNECTION DIRECTORY</p>
+                            <h2>SELECT ACCESS POINT</h2>
+                        </div>
+                    </div>
+                    <div class="links-grid" id="preview-grid" aria-live="polite"></div>
+                </section>
+            </main>
+        </div>
+
+        <button class="forge-trigger" id="forge-trigger" type="button" aria-controls="forge-panel" aria-expanded="false">
+            <span class="forge-trigger__dot"></span>
+            <b>EDIT</b>
+        </button>
+
+        <div class="panel-backdrop" id="panel-backdrop" hidden></div>
+        <aside class="forge-panel" id="forge-panel" aria-label="Управление ссылками" aria-hidden="true">
+            <header class="forge-panel__head">
+                <div>
+                    <p>CODE13 CONTROL</p>
+                    <h2>LINK MANAGER</h2>
+                </div>
+                <button class="icon-button" id="panel-close" type="button" aria-label="Закрыть панель">×</button>
+            </header>
+
+            <div class="forge-panel__body">
+                <section class="manager-section static-notice">
+                    <div class="manager-section__head"><h3>STATIC PUBLISHING</h3></div>
+                    <p>После изменений нажмите «СКАЧАТЬ LINKS.JS» и замените этим файлом <code>data/links.js</code> в GitHub.</p>
+                    <div class="publish-actions">
+                        <button class="secondary-button" id="export-js" type="button">СКАЧАТЬ LINKS.JS</button>
+                        <button class="secondary-button" id="export-json" type="button">РЕЗЕРВНАЯ КОПИЯ JSON</button>
+                        <label class="secondary-button file-button">ИМПОРТ JSON<input id="import-json" type="file" accept="application/json,.json"></label>
+                        <button class="secondary-button danger-soft" id="reset-published" type="button">СБРОСИТЬ ЧЕРНОВИК</button>
+                    </div>
+                </section>
+
+                <section class="manager-section">
+                    <div class="manager-section__head">
+                        <h3 id="form-title">NEW ACCESS POINT</h3>
+                        <button class="text-button" id="form-reset" type="button" hidden>ОТМЕНА</button>
+                    </div>
+                    <form class="link-form" id="link-form">
+                        <input type="hidden" id="link-id">
+                        <label>
+                            <span>НАЗВАНИЕ</span>
+                            <input id="link-title" type="text" maxlength="80" required placeholder="Например, CODE13 SUPPORT">
+                        </label>
+                        <label>
+                            <span>ССЫЛКА</span>
+                            <input id="link-url" type="url" maxlength="2048" required placeholder="https://example.com">
+                        </label>
+                        <label class="switch-row">
+                            <span>
+                                <b>ПОКАЗЫВАТЬ НА САЙТЕ</b>
+                                <small>Скрытая карточка останется в черновике.</small>
+                            </span>
+                            <input id="link-enabled" type="checkbox" checked>
+                            <i aria-hidden="true"></i>
+                        </label>
+                        <button class="primary-button" type="submit"><span id="save-button-text">ADD ACCESS POINT</span><b>+</b></button>
+                    </form>
+                </section>
+
+                <section class="manager-section manager-section--list">
+                    <div class="manager-section__head">
+                        <h3>ACTIVE DIRECTORY</h3>
+                        <span class="items-count" id="items-count">0</span>
+                    </div>
+                    <div class="admin-list" id="admin-list"></div>
+                </section>
+            </div>
+
+            <footer class="forge-panel__foot">
+                <a href="../" target="_blank" rel="noopener">ОТКРЫТЬ САЙТ ↗</a>
+                <button id="logout-button" type="button">ВЫЙТИ</button>
+            </footer>
+        </aside>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+</body>
+</html>
